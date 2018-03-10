@@ -1,0 +1,55 @@
+<div class="tv-theme full-size">
+  <div class="flex-container" data-bind="foreach: builds">
+    <div data-bind='hover: isMenuVisible' class="flex-item">
+      <div data-bind="animateCss: style" class="flex-item-inner nowrap">
+		
+		<div class="medium-height nrio-vertical-one">
+			<!-- Warnings -->
+			<span class="middle warnings prio-horizontal-three">
+				<span data-bind="visible: hasWarnings" class="fa fa-exclamation-triangle"></span>
+				<span data-bind="visible: hasErrors" class="fa fa-times-circle"></span>
+			</span>
+			<!-- Project Name -->
+			<span data-bind="text: project" class="project nowrap"></span>
+			<!-- Project Number -->
+			<span data-bind="text: number" class="number nowrap prio-horizontal-two"></span>
+		</div>
+        <div class="clear"></div>	
+		
+		<div class="medium-height nowrap prio-vertical-two prio-horizontal-three">
+          <!-- Requester -->
+		  <span class="middle requestedFor-block prio-horizontal-two">
+            <span class="middle fa fa-user"></span>
+            <span data-bind="text: requestedFor" class="middle for"></span>
+          </span>
+		  <!-- Reason -->
+		  <span class="reason-block prio-horizontal-three">
+            <span class="reason-icon middle fa fa-cog"></span>
+            <span data-bind="text: reason" class="middle reason"></span>
+          </span>
+        </div>
+		<div class="clear"></div>
+		
+		<div class="medium-height prio-vertical-three prio-horizontal-four"></div>
+		
+		<div class="medium-height nowrap prio-vertical-three">
+			<!-- Duration -->
+			<span class="middle duration-block prio-horizontal-four">
+				<span class="duration-icon fa fa-clock-o"></span>
+				<span data-bind="text: duration" class="middle duration"></span>
+			</span>
+		</div>
+		<div class="medium-height nowrap prio-vertical-two prio-horizontal-four-show" style="display: none">
+			<!-- Status -->
+			<span data-bind="text: statusText" class="middle status"></span>
+		</div>
+		<div class="clear"></div>
+
+      <div data-bind="fade: isMenuAvailable() && isMenuVisible(), fadeInDuration: 200, fadeOutDuration: 10" style="display: none" class="overlay">
+        <a data-bind="visible: url, attr: { href: url }" target="_blank">
+          <i class="fa fa-external-link"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
