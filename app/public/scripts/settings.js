@@ -16,6 +16,18 @@ define(['cookies'], function (cookies) {
         set: function(value) { cookies.set('browserNotificationEnabled', value); },
         enumerable: true
     });
+	
+	Object.defineProperty(settings, 'browserNotificationEnabledSuccess', {
+        get: function() { return parseBool(cookies.get('browserNotificationEnabledSuccess')) || false; },
+        set: function(value) { cookies.set('browserNotificationEnabledSuccess', value); },
+        enumerable: true
+    });
+	
+	Object.defineProperty(settings, 'browserNotificationEnabledFailed', {
+        get: function() { return parseBool(cookies.get('browserNotificationEnabledFailed')) || false; },
+        set: function(value) { cookies.set('browserNotificationEnabledFailed', value); },
+        enumerable: true
+    });
 
     Object.defineProperty(settings, 'soundNotificationEnabled', {
         get: function() { return parseBool(cookies.get('soundNotificationEnabled')) || false; },

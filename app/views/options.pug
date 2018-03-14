@@ -26,8 +26,8 @@ div(data-bind='with: options')
             .clear
 
             section
-                h1 Notification on build failure
-                .description With enabled notifications you can leave the build monitor open in the background and never miss a failed build again.
+                h1 Notifications
+                .description With enabled notifications you can leave the build monitor open in the background and never miss a build again.
 
                 label.checkbox
                     input(type='checkbox', data-bind='checked: soundNotificationEnabled')
@@ -35,7 +35,16 @@ div(data-bind='with: options')
 
                 label.checkbox(data-bind='visible: browserNotificationSupported')
                     input(type='checkbox', data-bind='checked: browserNotificationEnabled')
-                    span Show browser notification
+                    span Show browser notifications
+
+                    section.subsection
+                        label.checkbox(data-bind='visible: browserNotificationEnabled')
+                            input(type='checkbox', data-bind='checked: browserNotificationEnabledSuccess')
+                            span On Success
+
+                        label.checkbox(data-bind='visible: browserNotificationEnabled')
+                            input(type='checkbox', data-bind='checked: browserNotificationEnabledFailed')
+                            span On Failure
 
                 div(data-bind='visible: !browserNotificationSupported()')
                     small

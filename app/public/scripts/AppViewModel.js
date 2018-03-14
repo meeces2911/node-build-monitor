@@ -96,6 +96,7 @@ define(['ko', 'notification', 'BuildViewModel', 'OptionsViewModel'], function (k
                 var vm = getBuildById(build.id);
                 vm.update(build);
 
+				/* Build Failed */
                 if (build.status === 'Red' && matchesToNotificationFilter(build)) {
                     if (self.options.soundNotificationEnabled()) {
                         var audio = new Audio('/audio/woop.mp3');
@@ -103,7 +104,18 @@ define(['ko', 'notification', 'BuildViewModel', 'OptionsViewModel'], function (k
                     }
 
                     if (self.options.browserNotificationEnabled()) {
-                        notification.show(build);
+						if (self.options.browserNotificationEnabledFailed()) {
+							notification.showFailed(build);
+						}
+                    }
+                }
+				
+				/* Build Succeeded */
+				if (build.status === 'Green' && matchesToNotificationFilter(build)) {
+                    if (self.options.browserNotificationEnabled()) {
+						if (self.options.browserNotificationEnabledSuccess()) {
+							notification.showSuccess(build);
+						}
                     }
                 }
             });

@@ -8,6 +8,8 @@ define(['ko', 'helper', 'settings', 'notification'], function (ko, helper, setti
         self.themes = ko.observableArray(['default', 'stoplight', 'list', 'lingo', 'lowres']);
         self.browserNotificationSupported = ko.observable(notification.isSupportedAndNotDenied());
         self.browserNotificationEnabled = ko.observable(notification.isSupportedAndNotDenied() && settings.browserNotificationEnabled);
+		self.browserNotificationEnabledSuccess = ko.observable(notification.isSupportedAndNotDenied() && settings.browserNotificationEnabledSuccess);
+		self.browserNotificationEnabledFailed = ko.observable(notification.isSupportedAndNotDenied() && settings.browserNotificationEnabledFailed);
         self.soundNotificationEnabled = ko.observable(settings.soundNotificationEnabled);
         self.notificationFilterEnabled = ko.observable(settings.notificationFilterEnabled);
         self.notificationFilterValue = ko.observable(settings.notificationFilterValue);
@@ -44,10 +46,46 @@ define(['ko', 'helper', 'settings', 'notification'], function (ko, helper, setti
                     },
                     function () {
                         self.browserNotificationEnabled(false);
+						self.browserNotificationEnabledSuccess(false);
+						self.browserNotificationEnabledFailed(false);
                         settings.browserNotificationEnabled = false;
                     });
             } else {
                 settings.browserNotificationEnabled = false;
+            }
+        });
+		
+		self.browserNotificationEnabledSuccess.subscribe(function (enabled) {
+            if (enabled) {
+                notification.ensureGranted(
+                    function () {
+                        settings.browserNotificationEnabledSuccess = true;
+                    },
+                    function () {
+						self.browserNotificationEnabled(false);
+                        self.browserNotificationEnabledSuccess(false);
+						self.browserNotificationEnabledFailed(false);
+                        settings.browserNotificationEnabledSuccess = false;
+                    });
+            } else {
+                settings.browserNotificationEnabledSuccess = false;
+            }
+        });
+		
+		self.browserNotificationEnabledFailed.subscribe(function (enabled) {
+            if (enabled) {
+                notification.ensureGranted(
+                    function () {
+                        settings.browserNotificationEnabledFailed = true;
+                    },
+                    function () {
+						self.browserNotificationEnabled(false);
+						self.browserNotificationEnabledSuccess(false);
+                        self.browserNotificationEnabledFailed(false);
+                        settings.browserNotificationEnabledFailed = false;
+                    });
+            } else {
+                settings.browserNotificationEnabledSuccess = false;
             }
         });
 

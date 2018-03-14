@@ -31,11 +31,25 @@ define([], function () {
         }
     };
 
-    var show = function (build) {
+    var showFailed = function (build) {
         if (permissionIsGranted()) {
             var notification = new Notification('Build ' + build.number + ' failed!', {
                 body: 'The build ' + build.number + ' of project ' + build.project + ', which was triggered as ' + build.reason + ' by ' + build.requestedFor + ', failed.',
-                icon: '/images/notification.png'
+                icon: '/images/notification_failed.png'
+            });
+
+            notification.onclick = function() {
+                window.focus();
+                this.cancel();
+            };
+        }
+    };
+	
+	var showSuccess = function (build) {
+        if (permissionIsGranted()) {
+            var notification = new Notification('Build ' + build.number + ' succeeded.', {
+                body: 'The build ' + build.number + ' of project ' + build.project + ', which was triggered as ' + build.reason + ' by ' + build.requestedFor + ', succeeded.',
+                icon: '/images/notification_success.png'
             });
 
             notification.onclick = function() {
@@ -48,6 +62,7 @@ define([], function () {
     return {
         isSupportedAndNotDenied: isSupportedAndNotDenied,
         ensureGranted: ensureGranted,
-        show: show
+        showFailed: showFailed,
+		showSuccess: showSuccess
     };
 });
