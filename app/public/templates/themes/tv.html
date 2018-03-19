@@ -3,7 +3,7 @@
     <div data-bind='hover: isMenuVisible' class="flex-item">
       <div data-bind="animateCss: style" class="flex-item-inner nowrap">
 		
-		<div class="medium-height nrio-vertical-one">
+		<div class="medium-height">
 			<!-- Warnings -->
 			<span class="middle warnings prio-horizontal-three">
 				<span data-bind="visible: hasWarnings" class="fa fa-exclamation-triangle"></span>
@@ -30,7 +30,10 @@
         </div>
 		<div class="clear"></div>
 		
-		<div class="medium-height prio-vertical-three prio-horizontal-four"></div>
+		<div class="medium-height prio-vertical-three prio-horizontal-three">
+			<!-- Status -->
+			<span data-bind="text: statusText" class="middle status"></span>
+		</div>
 		
 		<div class="medium-height nowrap prio-vertical-two">
 			<!-- Duration -->
@@ -38,8 +41,6 @@
 				<span class="duration-icon fa fa-clock-o"></span>
 				<span data-bind="text: duration" class="middle duration"></span>
 			</span>
-			<!-- Status -->
-			<span data-bind="text: statusText" class="middle status prio-horizontal-four-show" style="display: none"></span>
 		</div>
 		<div class="clear"></div>
 

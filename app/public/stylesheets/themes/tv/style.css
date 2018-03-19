@@ -36,7 +36,7 @@
 .tv-theme .flex-item-inner {
   background: transparent;
   margin: 25px;
-  padding: 25px;
+  padding: 15px;
   box-shadow: 0px 0px 25px 8px rgba(0,0,0,0.8);
 }
 
@@ -88,7 +88,6 @@
 
 .tv-theme .flex-item .status {
   float: left;
-  font-family: 'open_sans_condensedbold';
   font-weight: bold;
   font-size: 25pt;
 }
