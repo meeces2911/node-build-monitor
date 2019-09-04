@@ -21,6 +21,7 @@ function VSTSRestBuilds() {
   let previousBuildsToGet = [];
   let apiVersion = null;
   let showBuildStep = null;
+  let showTestResults = null;
 
   /**
    * This object is the representation of resultFilter mentioned in the docs
@@ -138,6 +139,7 @@ function VSTSRestBuilds() {
    * @property {boolean} includeQueued Show queued builds
    * @property {string} apiVersion The api version to use
    * @property {boolean} showBuildStep Adds the current build step to the statusString of the build variable
+   * @property {boolean} showTestResults Show the builds test results
    */
 
   /**
@@ -167,7 +169,7 @@ function VSTSRestBuilds() {
     includeQueued = config.includeQueued || false;
     apiVersion = allowedAPIVersions[config.apiVersion] || '2.0';
     showBuildStep = config.showBuildStep || false;
-
+    showTestResults = config.showTestResults || false;
 
     console.log(config,apiVersion);
   };
@@ -220,10 +222,20 @@ function VSTSRestBuilds() {
         }, (err, results) => {
           callback(null, results);
         });
+      },
+      // ### 5. Get test results ###
+      get_test_results: (get_build_steps, callback) => {
+          // Only get the builds test results if we are allowed to
+          if (!showTestResults) { callback(null, get_build_steps); return; }
+          async.map(get_build_steps, (build, callback) => {
+              getTestResultsForBuild(build, callback);
+          }, (err, results) => {
+              callback(null, results);
+          });
       }
     }, (err, results) => {
       // Pass back to the monitor app
-      callback(err, results.get_build_steps);
+      callback(err, results.get_test_results);
     });
 
 
@@ -306,7 +318,8 @@ function VSTSRestBuilds() {
         status: color,
         statusText: text,
         timeline: build._links.timeline ? build._links.timeline.href : '',
-        url: webUrl
+        url: webUrl,
+        vstfsUri: encodeURIComponent(build.uri)
       };
 
       // Only show queued builds if we're told to
@@ -391,8 +404,8 @@ function VSTSRestBuilds() {
     };
 
     request.makeRequest(options, (err, body) => {
-      if (err) { callback(null); return; }
-      if (!(body && body.records)) { callback(null); return; }
+      if (err) { callback(null, build); return; }
+      if (!(body && body.records)) { callback(null, build); return; }
 
       // As of API version 2.0 there is no better way of doing this, we *have* to retrieve everything
       let records = body.records.sort( (a, b) => {
@@ -408,6 +421,44 @@ function VSTSRestBuilds() {
       callback(null, build);
     });
   };
+  
+  /**
+   * This function gets the results of any tests run as part of a build
+   * @private
+   * @param {Build} build 
+   * @param {} callback 
+   */
+  const getTestResultsForBuild = (build, callback) => {
+    const uri = build.vstfsUri;
+    if (!uri || uri === '') { callback(null, build); return; }
+      
+    const apiUrl = `${url}/${collection}/${project}/_apis/test/runs?api-version=${apiVersion}&buildUri=${uri}&automated=true`;
+    console.log(apiUrl);
+    
+    const options = {
+      url : apiUrl,
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+      },
+    };
+    
+    request.makeRequest(options, (err, body) => {
+      console.log(err, body);
+      if (err) { callback(null, build); return; }
+      if (!(body && body.value)) { callback(null, build); return; }
+      
+      let run = body.value[0];    // There should only ever be 1 (automated) test run per build
+      
+      build.tests = [];
+      build.tests.totalTests = run.totalTests;
+      build.tests.passedTests = run.passedTests;
+      build.tests.failedTests = run.unanalyzedTests;
+        
+      console.log(build);
+      callback(null, build);
+    });
+  };
+  
 }
 
 module.exports = VSTSRestBuilds;
