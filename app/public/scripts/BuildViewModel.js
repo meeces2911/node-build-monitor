@@ -20,9 +20,11 @@ define(['ko', 'moment', 'countdown'], function (ko, moment, countdown) {
         this.hasWarnings = ko.observable();
         this.hasErrors = ko.observable();
         this.url = ko.observable();
+		this.tests = ko.observable();
 
         this.update = function (build) {
-            this.id(build.id);
+            console.log(build);
+			this.id(build.id);
             this.isRunning(build.isRunning);
             this.isQueued(build.isQueued);
             this.project(build.project);
@@ -40,6 +42,7 @@ define(['ko', 'moment', 'countdown'], function (ko, moment, countdown) {
             this.hasWarnings(build.hasWarnings);
             this.hasErrors(build.hasErrors);
             this.url(build.url);
+			this.tests(build.tests);
         };
 
         this.update(build);

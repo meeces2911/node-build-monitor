@@ -432,9 +432,7 @@ function VSTSRestBuilds() {
     const uri = build.vstfsUri;
     if (!uri || uri === '') { callback(null, build); return; }
       
-    const apiUrl = `${url}/${collection}/${project}/_apis/test/runs?api-version=${apiVersion}&buildUri=${uri}&automated=true`;
-    console.log(apiUrl);
-    
+    const apiUrl = `${url}/${collection}/${project}/_apis/test/runs?api-version=${apiVersion}&buildUri=${uri}&automated=true`;    
     const options = {
       url : apiUrl,
       headers: {
@@ -443,18 +441,16 @@ function VSTSRestBuilds() {
     };
     
     request.makeRequest(options, (err, body) => {
-      console.log(err, body);
       if (err) { callback(null, build); return; }
       if (!(body && body.value)) { callback(null, build); return; }
       
       let run = body.value[0];    // There should only ever be 1 (automated) test run per build
       
-      build.tests = [];
-      build.tests.totalTests = run.totalTests;
-      build.tests.passedTests = run.passedTests;
-      build.tests.failedTests = run.unanalyzedTests;
-        
-      console.log(build);
+	  build.tests = [];
+      build.tests.total = run.totalTests;
+      build.tests.passed = run.passedTests;
+      build.tests.failed = run.unanalyzedTests;
+       
       callback(null, build);
     });
   };

@@ -29,6 +29,7 @@
           <span class="middle requestedFor-block">
             <span class="middle fa fa-user"></span>
             <span data-bind="text: requestedFor" class="middle for"></span>
+			<span data-bind="uniqueName: console.log($data.tests()), text: tests.passed" class="middle for"></span>
           </span>
           <span class="middle warnings prio-horizontal-one">
             <span data-bind="visible: hasWarnings" class="middle fa fa-exclamation-triangle"></span>
