@@ -23,7 +23,6 @@ define(['ko', 'moment', 'countdown'], function (ko, moment, countdown) {
 		this.tests = ko.observable();
 
         this.update = function (build) {
-            console.log(build);
 			this.id(build.id);
             this.isRunning(build.isRunning);
             this.isQueued(build.isQueued);

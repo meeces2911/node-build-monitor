@@ -446,7 +446,7 @@ function VSTSRestBuilds() {
       
       let run = body.value[0];    // There should only ever be 1 (automated) test run per build
       
-	  build.tests = [];
+	  build.tests = {};
       build.tests.total = run.totalTests;
       build.tests.passed = run.passedTests;
       build.tests.failed = run.unanalyzedTests;
