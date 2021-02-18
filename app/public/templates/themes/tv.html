@@ -9,8 +9,9 @@
 				<span data-bind="visible: hasWarnings" class="fa fa-exclamation-triangle"></span>
 				<span data-bind="visible: hasErrors" class="fa fa-times-circle"></span>
 			</span>
-			<!-- Project Name -->
+			<!-- Project (or Definition) Name -->
 			<span data-bind="text: definition" class="project nowrap"></span>
+			<span data-bind="text: project, visible: !definition()" class="project nowrap"></span>
 			<!-- Project Number -->
 			<span data-bind="text: number" class="number nowrap prio-horizontal-two"></span>
 		</div>
